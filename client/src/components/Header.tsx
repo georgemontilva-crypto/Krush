@@ -9,6 +9,7 @@ import { Logo } from "./Logo";
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Products" },
+  { href: "/lab-reports", label: "Lab Reports" },
   { href: "/about", label: "About Us" },
 ];
 
@@ -54,7 +55,7 @@ export function Header() {
                 key={n.href}
                 href={n.href}
                 className={cn(
-                  "relative rounded-full px-5 py-2.5 text-[15px] font-semibold transition-colors",
+                  "relative rounded-full px-4 py-2.5 text-[15px] font-semibold transition-colors lg:px-5",
                   active(n.href) ? "text-ink" : "text-cream/80 hover:text-cream",
                 )}
               >
@@ -108,7 +109,7 @@ export function Header() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.15 + i * 0.07 }}
                 >
-                  <Link href={n.href} className="font-display sticker block py-1 text-6xl text-white">
+                  <Link href={n.href} className="font-display sticker block py-1 text-5xl text-white min-[400px]:text-6xl">
                     {n.label}
                   </Link>
                 </motion.div>

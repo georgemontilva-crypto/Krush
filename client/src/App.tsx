@@ -9,11 +9,13 @@ import NotFound from "./pages/NotFound";
 const About = lazy(() => import("./pages/About"));
 const Products = lazy(() => import("./pages/Products"));
 const ProductLine = lazy(() => import("./pages/ProductLine"));
+const LabReports = lazy(() => import("./pages/LabReports"));
 
 const TITLES: Record<string, string> = {
   "/": "KRUSH | Premium Hemp Gummies, Flower & Diamond Sauce",
   "/about": "About Us | KRUSH",
   "/products": "Products | KRUSH",
+  "/lab-reports": "Lab Reports | KRUSH",
   "/products/bitez": "Krush Bitez Gummies | KRUSH",
   "/products/flower": "Krush Premium Flower | KRUSH",
   "/products/diamond-sauce": "Krush Diamond Sauce | KRUSH",
@@ -40,6 +42,7 @@ export default function App() {
             <Route path="/" component={Home} />
             <Route path="/about" component={About} />
             <Route path="/products" component={Products} />
+            <Route path="/lab-reports" component={LabReports} />
             <Route path="/products/:slug">{p => <ProductLine slug={p.slug} />}</Route>
             <Route component={NotFound} />
           </Switch>

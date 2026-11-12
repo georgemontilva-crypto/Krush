@@ -203,6 +203,9 @@ export default function ProductLine({ slug }: { slug: string }) {
                 <p className="mt-1.5 font-medium text-ink/75">
                   Scan the QR code on your {line.short} packaging to open the lab report for that exact batch.
                 </p>
+                <Link href="/lab-reports" className="mt-3 inline-flex items-center gap-1 text-sm font-bold underline underline-offset-4">
+                  Online lab reports: coming soon <ArrowUpRight className="size-4" />
+                </Link>
               </div>
             </div>
           </Reveal>
