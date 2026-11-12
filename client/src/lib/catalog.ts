@@ -178,7 +178,7 @@ export const LINES: Line[] = [
     hero: `${S}/rainbow-z.webp`,
     stats: [
       { label: "ML per syringe", value: "3" },
-      { label: "Pack", value: "1 / 5" },
+      { label: "Packs", value: "Single\u00a0/\n5 Pack" },
       { label: "Strains", value: "9" },
     ],
     specs: [

@@ -61,8 +61,8 @@ export default function Products() {
               </Tilt>
               <div className="relative grid grid-cols-3 gap-2">
                 {l.stats.map(s => (
-                  <div key={s.label} className="rounded-xl border-[3px] border-ink bg-cream p-2 text-center">
-                    <p className="font-display text-2xl leading-none">{s.value}</p>
+                  <div key={s.label} className="flex flex-col justify-center rounded-xl border-[3px] border-ink bg-cream p-2 text-center">
+                    <p className={cn("font-display leading-none", s.value.length > 6 ? "whitespace-pre-line text-base" : "text-2xl")}>{s.value}</p>
                     <p className="mt-0.5 text-[10px] font-bold uppercase leading-tight text-ink/60">{s.label}</p>
                   </div>
                 ))}

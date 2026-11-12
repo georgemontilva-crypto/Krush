@@ -161,8 +161,8 @@ function LineCard({ line, i }: { line: Line; i: number }) {
             <p className="mt-4 max-w-md text-lg font-semibold sm:text-xl">{line.tagline}</p>
             <div className="mt-6 grid max-w-md grid-cols-3 gap-2">
               {line.stats.map(s => (
-                <div key={s.label} className="rounded-2xl border-[3px] border-ink bg-cream p-3 text-center">
-                  <p className="font-display text-3xl leading-none sm:text-4xl">{s.value}</p>
+                <div key={s.label} className="flex flex-col justify-center rounded-2xl border-[3px] border-ink bg-cream p-3 text-center">
+                  <p className={cn("font-display leading-none", s.value.length > 6 ? "whitespace-pre-line text-base sm:text-2xl" : "text-3xl sm:text-4xl")}>{s.value}</p>
                   <p className="mt-1 text-[11px] font-bold uppercase leading-tight text-ink/60">{s.label}</p>
                 </div>
               ))}
