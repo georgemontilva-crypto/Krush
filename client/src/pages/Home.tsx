@@ -9,7 +9,6 @@ import { Goo } from "@/components/Goo";
 import { Logo } from "@/components/Logo";
 import { Marquee } from "@/components/Marquee";
 import { PopWords, Reveal } from "@/components/Reveal";
-import { SplashZone } from "@/components/Splash";
 import { Tilt } from "@/components/Tilt";
 
 function Hero() {
@@ -23,7 +22,7 @@ function Hero() {
 
   return (
     <div ref={ref}>
-      <SplashZone className="relative isolate min-h-[100svh] overflow-hidden">
+      <div className="relative isolate min-h-[100svh] overflow-hidden">
         <Goo colors={BRAND} className="absolute inset-0 -z-10 opacity-[0.55]" count={8} size={0.15} />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_50%_45%,transparent,#0b0b10_85%)]" />
         <div className="grain absolute inset-0 -z-10" />
@@ -74,8 +73,7 @@ function Hero() {
                 animate={{ scale: 1, rotate: 0, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 160, damping: 11, delay: 0.1 }}
                 whileHover={{ scale: 1.06, rotate: -2 }}
-                whileTap={{ scale: 0.88 }}
-                className="mx-auto w-[min(86vw,520px)] cursor-pointer"
+                className="mx-auto w-[min(86vw,520px)]"
               >
                 <Logo eager className="wobble w-full drop-shadow-[0_25px_45px_rgba(0,0,0,0.6)]" />
               </motion.div>
@@ -122,11 +120,8 @@ function Hero() {
             <img src="/products/sauce/candyland.webp" alt="" className="drop-glow h-40 w-auto rotate-6" />
           </div>
 
-          <p className="mt-8 hidden text-xs font-semibold uppercase tracking-[0.3em] text-cream/40 sm:block">
-            Tap anywhere to get Krushed
-          </p>
         </motion.div>
-      </SplashZone>
+      </div>
     </div>
   );
 }
@@ -367,7 +362,7 @@ function Wall() {
 function FinalCta() {
   return (
     <section className="px-3 pt-28 sm:px-5">
-      <SplashZone className="relative isolate overflow-hidden rounded-[2rem] border-4 border-ink bg-sun sm:rounded-[2.75rem]">
+      <div className="relative isolate overflow-hidden rounded-[2rem] border-4 border-ink bg-sun sm:rounded-[2.75rem]">
         <Goo colors={["#ff2d95", "#ff8a1f", "#3d8bff", "#8b3dff"]} className="absolute inset-0 -z-10 opacity-80" count={6} size={0.2} />
         <div className="mx-auto flex max-w-4xl flex-col items-center px-6 py-20 text-center sm:py-28">
           <BadgeCheck className="size-12 text-ink" strokeWidth={2.5} />
@@ -380,7 +375,7 @@ function FinalCta() {
             See all products <ArrowRight className="size-6" />
           </Link>
         </div>
-      </SplashZone>
+      </div>
     </section>
   );
 }

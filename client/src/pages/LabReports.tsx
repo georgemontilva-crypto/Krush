@@ -3,12 +3,11 @@ import { FlaskConical, QrCode, ShieldCheck } from "lucide-react";
 import { BRAND, LINES } from "@/lib/catalog";
 import { Goo } from "@/components/Goo";
 import { PopWords, Reveal } from "@/components/Reveal";
-import { SplashZone } from "@/components/Splash";
 
 export default function LabReports() {
   return (
     <>
-      <SplashZone className="relative isolate overflow-hidden">
+      <div className="relative isolate overflow-hidden">
         <Goo colors={BRAND} className="absolute inset-0 -z-10 opacity-50" count={7} size={0.17} />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_70%_at_50%_40%,transparent,#0b0b10_85%)]" />
         <div className="mx-auto flex min-h-[88svh] max-w-5xl flex-col items-center justify-center px-5 pb-16 pt-32 text-center sm:px-8">
@@ -49,7 +48,7 @@ export default function LabReports() {
             </div>
           </motion.div>
         </div>
-      </SplashZone>
+      </div>
 
       <section className="mx-auto max-w-7xl px-5 pt-10 sm:px-8">
         <div className="grid gap-5 md:grid-cols-3">

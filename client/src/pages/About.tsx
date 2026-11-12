@@ -7,7 +7,6 @@ import { Goo } from "@/components/Goo";
 import { Logo } from "@/components/Logo";
 import { Marquee } from "@/components/Marquee";
 import { PopWords, Reveal } from "@/components/Reveal";
-import { SplashZone } from "@/components/Splash";
 
 const VALUES = [
   { n: "01", title: "Flavor first", text: "If it doesn't taste incredible, it doesn't ship. Every Krush flavor is built to be loud from the first bite or the first pull.", color: "#ff2d95", rot: -3 },
@@ -65,7 +64,7 @@ function Word({
 export default function About() {
   return (
     <>
-      <SplashZone className="relative isolate overflow-hidden">
+      <div className="relative isolate overflow-hidden">
         <Goo colors={BRAND} className="absolute inset-0 -z-10 opacity-50" count={7} size={0.17} />
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(80%_70%_at_50%_40%,transparent,#0b0b10_85%)]" />
         <div className="mx-auto flex min-h-[86svh] max-w-6xl flex-col items-center justify-center px-5 pb-16 pt-32 text-center sm:px-8">
@@ -90,7 +89,7 @@ export default function About() {
             thirty flavors, and zero boring days.
           </motion.p>
         </div>
-      </SplashZone>
+      </div>
 
       <Marquee
         items={["Flavor first", "Lab tested", "Small batch", "21+ only", "Hand trimmed", "Child resistant"]}
