@@ -49,7 +49,7 @@ export function AgeGate() {
           transition={{ duration: 0.7, ease: [0.7, 0, 0.2, 1] }}
         >
           <Goo colors={BRAND} className="absolute inset-0 opacity-60" count={6} size={0.2} />
-          <div className="absolute inset-0 bg-ink/40 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-ink/40" />
           <motion.div
             initial={{ scale: 0.7, rotate: -8, opacity: 0 }}
             animate={{ scale: 1, rotate: 0, opacity: 1 }}

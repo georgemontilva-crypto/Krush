@@ -87,6 +87,7 @@ img {
 }
 
 .marquee {
+  will-change: transform;
   animation: marquee var(--speed, 30s) linear infinite;
 }
 .marquee-rev {
@@ -138,5 +139,37 @@ img {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+}
+
+.goo-lite {
+  filter: blur(28px);
+  opacity: 0.85;
+  will-change: transform;
+  transform: translateZ(0);
+  animation: goo-drift 16s ease-in-out infinite alternate;
+}
+@keyframes goo-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(14vw, -8vh, 0) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-10vw, 10vh, 0) scale(0.9);
+  }
+}
+
+/* Phones: drop the effects that force a repaint on every frame. */
+@media (hover: none), (max-width: 767px) {
+  .grain::after {
+    display: none;
+  }
+  .rainbow-text {
+    animation: none;
+  }
+  .drop-glow {
+    filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.45));
   }
 }

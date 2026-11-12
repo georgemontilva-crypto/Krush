@@ -41,8 +41,8 @@ export function Header() {
           className={cn(
             "mx-auto flex max-w-7xl items-center justify-between rounded-full border px-3 py-2 transition-all duration-500 sm:px-4",
             scrolled || open
-              ? "border-white/10 bg-ink/75 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl"
-              : "border-white/10 bg-ink/40 backdrop-blur-md",
+              ? "border-white/10 bg-ink/95 shadow-[0_10px_40px_rgba(0,0,0,0.45)] md:bg-ink/75 md:backdrop-blur-xl"
+              : "border-white/10 bg-ink/80 md:bg-ink/40 md:backdrop-blur-md",
           )}
         >
           <Link href="/" className="relative z-10 block" aria-label="KRUSH home">

@@ -6,7 +6,7 @@ import type { Flavor, Line } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
 import { Tilt } from "./Tilt";
 
-type Flood = { key: number; color: string; accent: string; x: number; y: number };
+type Flood = { key: number; color: string; accent: string; x: number; y: number; r: number };
 
 const TYPE_COLOR: Record<string, string> = { Sativa: "#ffe11a", Indica: "#8b3dff", Hybrid: "#2bd96b" };
 
@@ -74,7 +74,12 @@ export function FlavorLab({
 
   function startFlood(f: Flavor, x: number, y: number) {
     if (flood) setBase({ color: flood.color, accent: flood.accent });
-    setFlood({ key: ++n.current, color: f.color, accent: f.accent, x, y });
+    const el = box.current;
+    const w = el?.clientWidth ?? 0;
+    const h = el?.clientHeight ?? 0;
+    // Radius that reaches the farthest corner.
+    const r = Math.hypot(Math.max(x, w - x), Math.max(y, h - y)) + 40;
+    setFlood({ key: ++n.current, color: f.color, accent: f.accent, x, y, r });
   }
 
   const pick = (f: Flavor, e: MouseEvent<HTMLButtonElement>) => {
@@ -91,24 +96,37 @@ export function FlavorLab({
 
   return (
     <section ref={box} className={cn("grain relative isolate overflow-hidden", className)}>
-      {/* color layers */}
-      <div
-        className="absolute inset-0 -z-10"
-        style={{ background: `radial-gradient(120% 90% at 70% 30%, ${base.accent}, ${base.color} 60%)` }}
-      />
-      <AnimatePresence>
-        {flood && (
-          <motion.div
-            key={flood.key}
-            className="absolute inset-0 -z-10"
-            style={{ background: `radial-gradient(120% 90% at 70% 30%, ${flood.accent}, ${flood.color} 60%)` }}
-            initial={{ clipPath: `circle(0px at ${flood.x}px ${flood.y}px)` }}
-            animate={{ clipPath: `circle(2400px at ${flood.x}px ${flood.y}px)` }}
-            transition={{ duration: 0.9, ease: [0.6, 0, 0.2, 1] }}
-            onAnimationComplete={() => setBase({ color: flood.color, accent: flood.accent })}
-          />
-        )}
+      {/* color layers: the base crossfades, the flood is a small circle scaled up (GPU only) */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={base.color + base.accent}
+          className="absolute inset-0 -z-20"
+          style={{ background: `radial-gradient(120% 90% at 70% 30%, ${base.accent}, ${base.color} 60%)` }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.45 }}
+        />
       </AnimatePresence>
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <AnimatePresence>
+          {flood && (
+            <motion.div
+              key={flood.key}
+              className="absolute size-[200px] rounded-full will-change-transform"
+              style={{ left: flood.x - 100, top: flood.y - 100, background: flood.color }}
+              initial={{ scale: 0, opacity: 1 }}
+              animate={{ scale: flood.r / 100 }}
+              exit={{ opacity: 0, transition: { duration: 0.45 } }}
+              transition={{ duration: 0.75, ease: [0.6, 0, 0.2, 1] }}
+              onAnimationComplete={() => {
+                setBase({ color: flood.color, accent: flood.accent });
+                setFlood(f => (f && f.key === flood.key ? null : f));
+              }}
+            />
+          )}
+        </AnimatePresence>
+      </div>
       <div className="halftone pointer-events-none absolute -right-20 -top-20 -z-10 size-[420px] rounded-full text-black/15 [mask-image:radial-gradient(circle,black,transparent_70%)]" />
 
       <div className="mx-auto max-w-7xl px-5 pb-8 pt-16 sm:px-8 sm:pt-20">

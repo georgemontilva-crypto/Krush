@@ -1,5 +1,5 @@
-import { useEffect, useId, useRef } from "react";
-import { prefersReducedMotion } from "@/lib/utils";
+import { useEffect, useId, useRef, useState } from "react";
+import { isLite, prefersReducedMotion } from "@/lib/utils";
 
 type Props = {
   colors: string[];
@@ -16,7 +16,7 @@ type Props = {
  * they melt into each other like the splash in the logo. Animation pauses
  * while off screen.
  */
-export function Goo({ colors, follow = true, className, count = 7, size = 0.16 }: Props) {
+function GooSvg({ colors, follow = true, className, count = 7, size = 0.16 }: Props) {
   const id = useId().replace(/:/g, "");
   const wrap = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
@@ -97,10 +97,15 @@ export function Goo({ colors, follow = true, className, count = 7, size = 0.16 }
 
   return (
     <div ref={wrap} className={className} aria-hidden="true">
-      <svg ref={svg} className="h-full w-full" preserveAspectRatio="none">
+      {/* Drawn at half resolution and scaled up: the blur filter costs 4x less. */}
+      <svg
+        ref={svg}
+        className="h-1/2 w-1/2 origin-top-left scale-[2] will-change-transform"
+        preserveAspectRatio="none"
+      >
         <defs>
           <filter id={`goo-${id}`}>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="22" result="b" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="11" result="b" />
             <feColorMatrix in="b" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 28 -11" />
           </filter>
         </defs>
@@ -113,4 +118,39 @@ export function Goo({ colors, follow = true, className, count = 7, size = 0.16 }
       </svg>
     </div>
   );
+}
+
+/**
+ * Phone version: plain blurred blobs moved with CSS transforms only, which the
+ * GPU animates without repainting anything.
+ */
+function GooLite({ colors, className, count = 7 }: Props) {
+  const n = Math.min(count, 5);
+  return (
+    <div className={className} aria-hidden="true">
+      <div className="relative h-full w-full overflow-hidden">
+        {Array.from({ length: n }, (_, i) => (
+          <span
+            key={i}
+            className="goo-lite absolute rounded-full"
+            style={{
+              background: colors[i % colors.length],
+              width: `${46 + ((i * 17) % 22)}vmin`,
+              height: `${46 + ((i * 17) % 22)}vmin`,
+              left: `${[-12, 52, 8, 60, 24][i]}%`,
+              top: `${[4, 0, 48, 56, 26][i]}%`,
+              animationDuration: `${14 + i * 3}s`,
+              animationDelay: `${-i * 2.5}s`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function Goo(props: Props) {
+  const [lite, setLite] = useState(true);
+  useEffect(() => setLite(isLite()), []);
+  return lite ? <GooLite {...props} /> : <GooSvg {...props} />;
 }

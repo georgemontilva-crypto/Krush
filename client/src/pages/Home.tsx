@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, ArrowUpRight, BadgeCheck, FlaskConical, Hand, Leaf, ShieldCheck, Sparkles } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { ALL_FLAVORS, BRAND, LINES, type Flavor, type Line } from "@/lib/catalog";
-import { cn } from "@/lib/utils";
+import { cn, isLite } from "@/lib/utils";
 import { FlavorLab } from "@/components/FlavorLab";
 import { Goo } from "@/components/Goo";
 import { Logo } from "@/components/Logo";
@@ -33,7 +33,7 @@ function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] text-cream/80 backdrop-blur"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] text-cream/80 md:backdrop-blur"
           >
             Premium Hemp · Est. for 21+
           </motion.p>
@@ -304,12 +304,14 @@ function Promises() {
 }
 
 function Wall() {
-  const row = (items: typeof ALL_FLAVORS) =>
+  const [lite, setLite] = useState(true);
+  useEffect(() => setLite(isLite()), []);
+  const row = (items: typeof ALL_FLAVORS, extra = "") =>
     items.map(f => (
       <Link
         key={`${f.line.slug}-${f.slug}`}
         href={`/products/${f.line.slug}?flavor=${f.slug}`}
-        className="group relative mx-2 flex h-56 w-44 shrink-0 flex-col items-center justify-end overflow-hidden rounded-[1.5rem] border-[3px] border-ink p-3 sm:h-64 sm:w-52"
+        className={cn(extra, "group relative mx-2 flex h-56 w-44 shrink-0 flex-col items-center justify-end overflow-hidden rounded-[1.5rem] border-[3px] border-ink p-3 sm:h-64 sm:w-52")}
         style={{ background: `linear-gradient(160deg, ${f.accent}, ${f.color})` }}
       >
         <img
@@ -321,7 +323,7 @@ function Wall() {
             f.line.slug === "bitez" && "h-[52%] rounded-lg border-2 border-ink",
           )}
         />
-        <span className="relative w-full rounded-xl bg-ink/85 px-2 py-1.5 text-center text-xs font-bold text-cream backdrop-blur">
+        <span className="relative w-full rounded-xl bg-ink/85 px-2 py-1.5 text-center text-xs font-bold text-cream">
           {f.name}
           <span className="block text-[10px] font-semibold uppercase tracking-widest text-cream/55">{f.line.short}</span>
         </span>
@@ -333,23 +335,31 @@ function Wall() {
     <section className="pt-28">
       <Reveal className="mx-auto max-w-7xl px-5 sm:px-8">
         <h2 className="font-display text-[clamp(2.6rem,6.5vw,5rem)] leading-[0.9]">
-          The wall <span className="outline-text [-webkit-text-stroke-color:var(--color-sun)]">of flavor</span>
+          The wall <span className="outline-text" style={{ WebkitTextStrokeColor: "var(--color-sun)" }}>of flavor</span>
         </h2>
+        <p className="mt-3 text-cream/60 md:hidden">Swipe to see all {ALL_FLAVORS.length} flavors.</p>
       </Reveal>
-      <div className="mt-10 grid gap-4 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-        <div className="overflow-hidden">
-          <div className="marquee flex w-max hover:[animation-play-state:paused]" style={{ ["--speed" as string]: "70s" }}>
-            {row(a)}
-            {row(a)}
+      {lite ? (
+        /* Phones: native swipe, nothing animating in the background. */
+        <div className="no-scrollbar mt-8 flex snap-x snap-mandatory overflow-x-auto px-3 pb-2 [-webkit-overflow-scrolling:touch]">
+          {row(ALL_FLAVORS, "snap-start")}
+        </div>
+      ) : (
+        <div className="mt-10 grid gap-4 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+          <div className="overflow-hidden">
+            <div className="marquee flex w-max hover:[animation-play-state:paused]" style={{ ["--speed" as string]: "70s" }}>
+              {row(a)}
+              {row(a)}
+            </div>
+          </div>
+          <div className="overflow-hidden">
+            <div className="marquee marquee-rev flex w-max hover:[animation-play-state:paused]" style={{ ["--speed" as string]: "80s" }}>
+              {row(b)}
+              {row(b)}
+            </div>
           </div>
         </div>
-        <div className="overflow-hidden">
-          <div className="marquee marquee-rev flex w-max hover:[animation-play-state:paused]" style={{ ["--speed" as string]: "80s" }}>
-            {row(b)}
-            {row(b)}
-          </div>
-        </div>
-      </div>
+      )}
     </section>
   );
 }
