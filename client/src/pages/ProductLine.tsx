@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
-import { ArrowLeft, ArrowUpRight, Check, ChevronDown, QrCode } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Check, ChevronDown, FileText, FlaskConical, QrCode } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useSearch } from "wouter";
 import { LINES, lineBySlug, type Flavor, type Line } from "@/lib/catalog";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import { FlavorLab } from "@/components/FlavorLab";
 import { Reveal } from "@/components/Reveal";
 import NotFound from "./NotFound";
@@ -196,18 +196,48 @@ export default function ProductLine({ slug }: { slug: string }) {
                 </span>
               ))}
             </div>
-            <div className="mt-8 flex items-start gap-4 rounded-[1.5rem] border-[3px] border-ink bg-sun p-5 text-ink">
-              <QrCode className="size-10 shrink-0" strokeWidth={2.2} />
-              <div>
-                <p className="font-display text-2xl leading-none">Lab report on every pack</p>
-                <p className="mt-1.5 font-medium text-ink/75">
-                  Scan the QR code on your {line.short} packaging to open the lab report for that exact batch.
-                </p>
-                <Link href="/lab-reports" className="mt-3 inline-flex items-center gap-1 text-sm font-bold underline underline-offset-4">
-                  Online lab reports: coming soon <ArrowUpRight className="size-4" />
-                </Link>
+            {flavor.lab ? (
+              <div className="mt-8 rounded-[1.5rem] border-[3px] border-ink bg-sun p-5 text-ink">
+                <div className="flex items-start gap-4">
+                  <FlaskConical className="size-10 shrink-0" strokeWidth={2.2} />
+                  <div>
+                    <p className="font-display text-2xl leading-none">{flavor.name} lab report</p>
+                    <p className="mt-1.5 font-medium text-ink/75">
+                      Batch {flavor.lab.batch} · tested {formatDate(flavor.lab.tested)} by {flavor.lab.lab}. All panels passed.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <a
+                    href={flavor.lab.file}
+                    target="_blank"
+                    rel="noopener"
+                    className="font-display inline-flex items-center gap-2 rounded-xl border-[3px] border-ink bg-ink px-5 py-2.5 text-lg text-cream transition-transform hover:-translate-y-0.5"
+                  >
+                    <FileText className="size-5" /> View lab report
+                  </a>
+                  <Link
+                    href={`/lab-reports?flavor=${flavor.slug}#${line.slug}`}
+                    className="inline-flex items-center gap-1 px-2 py-2.5 text-sm font-bold underline underline-offset-4"
+                  >
+                    All {line.short} reports <ArrowUpRight className="size-4" />
+                  </Link>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mt-8 flex items-start gap-4 rounded-[1.5rem] border-[3px] border-ink bg-sun p-5 text-ink">
+                <QrCode className="size-10 shrink-0" strokeWidth={2.2} />
+                <div>
+                  <p className="font-display text-2xl leading-none">Lab report on every pack</p>
+                  <p className="mt-1.5 font-medium text-ink/75">
+                    Scan the QR code on your {line.short} packaging to open the lab report for that exact batch.
+                  </p>
+                  <Link href="/lab-reports" className="mt-3 inline-flex items-center gap-1 text-sm font-bold underline underline-offset-4">
+                    Online lab reports: coming soon <ArrowUpRight className="size-4" />
+                  </Link>
+                </div>
+              </div>
+            )}
           </Reveal>
 
           <Reveal delay={0.1}>

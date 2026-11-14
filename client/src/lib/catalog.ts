@@ -11,6 +11,18 @@ export type Flavor = {
   image: string;
   /** Optional extra shot (e.g. the 60CT display the flavor ships in). */
   alt?: string;
+  /** Certificate of analysis, once the lab has published it. */
+  lab?: LabReport;
+};
+
+export type LabReport = {
+  /** PDF served from /public. */
+  file: string;
+  lab: string;
+  batch: string;
+  /** Date the lab completed the analysis (YYYY-MM-DD). */
+  tested: string;
+  totalCannabinoids: string;
 };
 
 export type Spec = { label: string; value: string };
@@ -70,14 +82,37 @@ const jar = (slug: string, name: string, type: Flavor["type"], color: string, ac
   image: `${F}/${slug}.webp`,
 });
 
-const syringe = (slug: string, name: string, type: Flavor["type"], color: string, accent: string): Flavor => ({
-  slug,
-  name,
-  type,
-  color,
-  accent,
-  image: `${S}/${slug}.webp`,
-});
+/** Diamond Sauce COAs from ACS Laboratory, batch of 2026-10-08. */
+const SAUCE_LAB: Record<string, [batch: string, total: string]> = {
+  "purple-punch": ["KS1026PP", "60.2%"],
+  "cherry-drip": ["KS1026CD", "60.6%"],
+  "strawnana-haze": ["KS1026SH", "60.5%"],
+  "blue-nurdz": ["KS1026BN", "60.9%"],
+  candyland: ["KS1026CD", "61.1%"],
+  "peach-ringz": ["KS1026PZ", "61.5%"],
+  "pineapple-rush": ["KS1026PR", "61.9%"],
+  "rainbow-z": ["KS1026RZ", "62.0%"],
+  ztarburst: ["KS1026ZT", "61.5%"],
+};
+
+const syringe = (slug: string, name: string, type: Flavor["type"], color: string, accent: string): Flavor => {
+  const lab = SAUCE_LAB[slug];
+  return {
+    slug,
+    name,
+    type,
+    color,
+    accent,
+    image: `${S}/${slug}.webp`,
+    lab: lab && {
+      file: `/lab-reports/diamond-sauce/krush-diamond-sauce-${slug}-coa.pdf`,
+      lab: "ACS Laboratory",
+      batch: lab[0],
+      tested: "2026-10-23",
+      totalCannabinoids: lab[1],
+    },
+  };
+};
 
 export const LINES: Line[] = [
   {
@@ -201,7 +236,7 @@ export const LINES: Line[] = [
       syringe("blue-nurdz", "Blue Nurdz", "Indica", "#2f6bff", "#22d3ee"),
       syringe("candyland", "Candyland", "Hybrid", "#ff3da8", "#ff9ad5"),
       syringe("peach-ringz", "Peach Ringz", "Hybrid", "#ff8a1f", "#ff4f3d"),
-      syringe("pineapple-kush", "Pineapple Kush", "Sativa", "#f5c400", "#9bd93c"),
+      syringe("pineapple-rush", "Pineapple Rush", "Sativa", "#f5c400", "#9bd93c"),
       syringe("rainbow-z", "Rainbow Z", "Hybrid", "#ff2d95", "#3d8bff"),
       syringe("ztarburst", "Ztarburst", "Sativa", "#ff4a2f", "#ffb21a"),
     ],

@@ -23,7 +23,7 @@ export function Footer() {
           <ul className="mt-4 grid gap-2.5 text-lg font-semibold">
             <li><Link href="/" className="hover:text-sun">Home</Link></li>
             <li><Link href="/products" className="hover:text-sun">All products</Link></li>
-            <li><Link href="/lab-reports" className="hover:text-sun">Lab reports <span className="ml-1 rounded-full bg-pink px-2 py-0.5 align-middle text-[10px] font-bold uppercase text-white">Soon</span></Link></li>
+            <li><Link href="/lab-reports" className="hover:text-sun">Lab reports</Link></li>
             <li><Link href="/about" className="hover:text-sun">About us</Link></li>
           </ul>
         </div>
